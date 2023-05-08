@@ -1,0 +1,18 @@
+.leftContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.leftContainer > div {
+  margin-bottom: 1rem;
+}
+
+.rightContainer {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  padding-left: 25%;
+  padding-right: 25%;
+}

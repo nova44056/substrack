@@ -1,0 +1,31 @@
+.button {
+  padding: 8px 16px;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button > * {
+  margin-right: 0.5rem;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.primary {
+  background-color: var(--primary);
+  color: var(--secondary);
+}
+
+.secondary {
+  background-color: var(--secondary);
+  color: var(--primary);
+}
+
+.secondaryOutline {
+  border: 1px solid var(--primary);
+}

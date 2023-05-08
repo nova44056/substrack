@@ -1,0 +1,11 @@
+.active {
+  color: var(--secondary);
+}
+
+.inactive {
+  color: var(--secondary-inactive);
+}
+
+.title {
+  text-transform: capitalize;
+}

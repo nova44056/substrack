@@ -1,0 +1,39 @@
+.leftContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 1rem;
+}
+
+.leftContainer > div {
+  margin-bottom: 1rem;
+}
+
+.rightContainer {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  padding-left: 25%;
+  padding-right: 25%;
+}
+
+.or {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.or p {
+  background-color: white;
+  z-index: 9999;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.or::before {
+  content: "";
+  width: 100%;
+  height: 1px;
+  background-color: var(--secondary-inactive);
+  position: absolute;
+}
