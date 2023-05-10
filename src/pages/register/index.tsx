@@ -8,11 +8,21 @@ import { Button } from "../../../components/button";
 import { FcGoogle } from "react-icons/fc";
 import { Spacer } from "../../../components/spacer";
 import { IRegisterUserDto } from "../../../interface";
+import { isPublicRoute } from "../../../routes";
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
+} from "firebase/auth";
+import { useRouter } from "next/router";
+import { auth } from "../../../firebase";
 
-export default function Register() {
+function Register() {
   const [currentStep, setCurrentStep] = React.useState<CREATE_ACCOUNT_STEP>(
     CREATE_ACCOUNT_STEP.YOUR_DETAILS
   );
+
+  const router = useRouter();
 
   const [payload, setPayload] = React.useState<IRegisterUserDto>({
     firstName: "",
@@ -32,7 +42,7 @@ export default function Register() {
           setPayload: setPayload,
         }}
       >
-        <section className={styles.leftContainer}>
+        <aside className={styles.leftContainer}>
           {Object.entries(CREATE_ACCOUNT_STEP).map(([key, value], index) => (
             <Step
               key={index}
@@ -40,7 +50,7 @@ export default function Register() {
               description={value}
             />
           ))}
-        </section>
+        </aside>
         <section className={styles.rightContainer}>
           <h2>
             Sign up for SubsTrack now and start managing your subscriptions and
@@ -51,7 +61,14 @@ export default function Register() {
             of your subscriptions today.
           </p>
           <Spacer direction="vertical" size={16} />
-          <Button.SecondaryOutline>
+          <Button.SecondaryOutline
+            onClick={() => {
+              signInWithRedirect(auth, new GoogleAuthProvider()).then(() => {
+                router.push("/dashboard");
+              });
+            }}
+            type="button"
+          >
             <FcGoogle size={20} />
             <span>Continue with Google</span>
           </Button.SecondaryOutline>
@@ -66,3 +83,5 @@ export default function Register() {
     </Layout>
   );
 }
+
+export default isPublicRoute(Register);

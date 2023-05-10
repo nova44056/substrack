@@ -29,3 +29,7 @@
 .secondaryOutline {
   border: 1px solid var(--primary);
 }
+
+.primaryOutline {
+  border: 1px solid var(--secondary);
+}

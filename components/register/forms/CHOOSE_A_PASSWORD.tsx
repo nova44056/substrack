@@ -5,16 +5,54 @@ import { Button } from "../../button";
 import { Input } from "../../input";
 import { Spacer } from "../../spacer";
 import { CREATE_ACCOUNT_STEP } from "../../../enum";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../../../firebase";
+import { useRouter } from "next/router";
 
 export const CHOOSE_A_PASSWORD = () => {
   const { payload, setPayload, setCurrentStep } = React.useContext(
     RegisterContext
   ) as IRegisterContext;
 
+  const form = React.useRef<HTMLFormElement>(null);
+  const router = useRouter();
+
   return (
     <form
+      ref={form}
       onSubmit={(event) => {
         event.preventDefault();
+        if (form.current?.reportValidity()) {
+          createUserWithEmailAndPassword(auth, payload.email, payload.password)
+            .then((userCredential) => {
+              // Signed in
+              const user = userCredential.user;
+              updateProfile(user, {
+                displayName: `${payload.firstName} ${payload.lastName}`,
+              })
+                .then(() => {
+                  setPayload({
+                    firstName: "",
+                    lastName: "",
+                    email: "",
+                    password: "",
+                    confirmPassword: "",
+                  });
+                  router.push("/login");
+                })
+                .catch((error) => {
+                  const errorCode = error.code;
+                  const errorMessage = error.message;
+                  console.log(errorCode, errorMessage);
+                });
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              console.log(errorCode, errorMessage);
+              // ..
+            });
+        }
       }}
     >
       <Input.Password
@@ -72,7 +110,7 @@ export const CHOOSE_A_PASSWORD = () => {
           Back
         </Button.SecondaryOutline>
         <Spacer size={48} direction="horizontal" />
-        <Button.Primary>Create account</Button.Primary>
+        <Button.Primary type="submit">Create account</Button.Primary>
       </div>
     </form>
   );
