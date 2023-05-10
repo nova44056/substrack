@@ -157,7 +157,6 @@ export const getCostBreakdown = functions.https.onCall(
     }
   }
 );
-
 export const postSubscriptionServiceReview = functions.https.onCall(
   async (data, context) => {
     // Check if user is authenticated
@@ -168,7 +167,7 @@ export const postSubscriptionServiceReview = functions.https.onCall(
       );
     }
 
-    // Get the subscription service ID and review text from the request data
+    // Get the subscription service ID, review text, and rating from the request data
     const { subscriptionServiceId, review, rating } = data;
 
     try {
@@ -191,6 +190,7 @@ export const postSubscriptionServiceReview = functions.https.onCall(
       const reviewRef = admin.database().ref("reviews").push();
       await reviewRef.set({
         subscriptionServiceId,
+        subscriptionServiceName: subscriptionService.name,
         userId: context.auth.uid,
         postedBy: context.auth.token.name,
         review,
@@ -208,13 +208,6 @@ export const postSubscriptionServiceReview = functions.https.onCall(
 export const getSubscriptionServiceReviews = functions.https.onCall(
   async (data, context) => {
     try {
-      // Get all subscription services
-      const subscriptionServicesSnapshot = await admin
-        .database()
-        .ref("subscriptionServices")
-        .once("value");
-      const subscriptionServices = subscriptionServicesSnapshot.val();
-
       // Get all reviews for all subscription services, ordered by createdAt from newest to oldest
       const reviewsSnapshot = await admin
         .database()
@@ -222,18 +215,6 @@ export const getSubscriptionServiceReviews = functions.https.onCall(
         .orderByChild("createdAt")
         .once("value");
       const reviews = reviewsSnapshot.val();
-
-      // Add subscription service name to each review object
-      for (const reviewId in reviews) {
-        if (reviews.hasOwnProperty(reviewId)) {
-          const review = reviews[reviewId];
-          const subscriptionServiceId = review.subscriptionServiceId;
-          if (subscriptionServices.hasOwnProperty(subscriptionServiceId)) {
-            review.subscriptionServiceName =
-              subscriptionServices[subscriptionServiceId].name;
-          }
-        }
-      }
 
       // Return the reviews
       return reviews;
