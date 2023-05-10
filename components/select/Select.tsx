@@ -19,7 +19,7 @@ export const Select = ({ label, ...props }: Props) => {
       </label>
       <br />
       <select className={styles.select} required {...props}>
-        <option disabled selected value="">
+        <option disabled value="">
           -- Select an option --
         </option>
         {props.options.map((option) => (

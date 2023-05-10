@@ -8,6 +8,8 @@ import {
 } from "../../../interface";
 import { Input } from "../../input";
 import { Select } from "../../select";
+import { httpsCallable } from "firebase/functions";
+import { functions } from "../../../firebase";
 export const AddSubscriptionServicesForm = () => {
   const { dialog } = React.useContext(
     AddSubscriptionServicesContext
@@ -25,6 +27,15 @@ export const AddSubscriptionServicesForm = () => {
       onSubmit={(event) => {
         event.preventDefault();
         if (form.current?.reportValidity()) {
+          const addSubscriptionServices = httpsCallable(
+            functions,
+            "addSubscriptionServices"
+          );
+          addSubscriptionServices(payload).then((result: any) => {
+            if (result.data.success) {
+              dialog.current?.close();
+            }
+          });
         }
       }}
     >

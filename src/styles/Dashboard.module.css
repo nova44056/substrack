@@ -8,3 +8,30 @@
 .rightContainer {
   padding: 1rem;
 }
+
+.menu {
+  list-style-type: none;
+}
+
+.menu h1 {
+  margin-bottom: 4rem;
+}
+
+.menu li {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.menu li.active {
+  background-color: var(--secondary);
+}
+
+.menu li.active a {
+  color: var(--primary);
+}
+
+.menu li a {
+  text-decoration: none;
+  color: white;
+}
