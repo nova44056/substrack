@@ -1,10 +1,6 @@
 import classNames from "classnames";
 import styles from "./Input.module.css";
-
-interface TextAreaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  label: string;
-}
+import { TextAreaProps } from "./input.interface";
 
 export const TextArea: React.FC<TextAreaProps> = (props: TextAreaProps) => {
   return (

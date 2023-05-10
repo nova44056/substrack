@@ -5,3 +5,7 @@ export type BaseInputProps = {
   required: boolean;
   value: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
+
+export type TextAreaProps = {
+  label: string;
+} & React.TextareaHTMLAttributes<HTMLTextAreaElement>;
