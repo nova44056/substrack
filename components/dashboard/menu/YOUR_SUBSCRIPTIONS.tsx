@@ -1,12 +1,14 @@
 import React from "react";
 import { AddSubscriptionServices } from "../add-subscription-services";
-import { IAuthContext, ISubsciptionServices } from "../../../interface";
-import { AuthContext } from "../../../context";
+import { ISubsciptionServices } from "../../../interface";
+
 import { functions } from "../../../firebase";
 import { httpsCallable } from "firebase/functions";
 import { Button } from "../../button";
+import { CostBreakdown } from "../cost-breakdown/CostBreakdown";
+import { Spacer } from "../../spacer";
+import { Card } from "../../card";
 export const YOUR_SUBSCRIPTIONS = () => {
-  const { currentUser } = React.useContext(AuthContext) as IAuthContext;
   const [subscriptionServices, setSubscriptionServices] =
     React.useState<ISubsciptionServices[]>();
 
@@ -17,6 +19,7 @@ export const YOUR_SUBSCRIPTIONS = () => {
     );
 
     getSubscriptionServices().then((result) => {
+      if (!result.data) return;
       setSubscriptionServices(
         Object.keys(result.data as any).map((key) => {
           return {
@@ -30,15 +33,50 @@ export const YOUR_SUBSCRIPTIONS = () => {
 
   return (
     <>
-      <AddSubscriptionServices />
+      <CostBreakdown />
+      <Spacer direction="vertical" size={16} />
       <div>
-        <h1>Your Subscriptions</h1>
-        <ul>
+        <div style={{ justifyContent: "space-between" }} className="row">
+          <h1>Your Subscriptions</h1>
+          <AddSubscriptionServices />
+        </div>
+        <ul
+          style={{
+            height: "calc(100vh - 91.53px - 91.53px - 35.99px)",
+            overflowY: "scroll",
+          }}
+        >
+          <Spacer direction="vertical" size={16} />
           {subscriptionServices?.map((subscriptionService) => (
-            <li key={subscriptionService.id}>
-              <span>{subscriptionService.name}</span>
-              <Button.SecondaryOutline>Delete</Button.SecondaryOutline>
-            </li>
+            <>
+              <Card.SecondaryOutline
+                style={{ width: "100%" }}
+                role="list"
+                key={subscriptionService.id}
+              >
+                <h2>{subscriptionService.name}</h2>
+                <p>Cost: ${subscriptionService.cost}</p>
+                <p style={{ textTransform: "capitalize" }}>
+                  Billing Period: {subscriptionService.billingPeriod}
+                </p>
+                <Button.Primary
+                  onClick={() => {
+                    const deleteSubscriptionService = httpsCallable(
+                      functions,
+                      "deleteSubscriptionService"
+                    );
+                    deleteSubscriptionService({
+                      subscriptionServiceId: subscriptionService.id,
+                    }).then((result) => {
+                      window.location.reload();
+                    });
+                  }}
+                >
+                  Delete
+                </Button.Primary>
+              </Card.SecondaryOutline>
+              <Spacer direction="vertical" size={16} />
+            </>
           ))}
         </ul>
       </div>

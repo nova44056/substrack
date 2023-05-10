@@ -12,7 +12,7 @@ export const AddSubscriptionServices = () => {
       value={{ openDialog, setOpenDialog, dialog }}
     >
       <Button.Primary
-        style={{ width: "auto", marginLeft: "auto" }}
+        style={{ width: "auto" }}
         type="button"
         onClick={() => {
           dialog.current?.showModal();

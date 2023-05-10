@@ -1,0 +1,27 @@
+.card {
+  width: fit-content;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.primary {
+  background-color: var(--primary);
+  color: var(--secondary);
+}
+
+.secondary {
+  background-color: var(--secondary);
+  color: var(--primary);
+}
+
+.primaryOutline {
+  background-color: var(--primary);
+  color: var(--secondary);
+  border: 1px solid var(--secondary);
+}
+
+.secondaryOutline {
+  background-color: var(--secondary);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}

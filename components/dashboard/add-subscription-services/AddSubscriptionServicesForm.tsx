@@ -10,6 +10,7 @@ import { Input } from "../../input";
 import { Select } from "../../select";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "../../../firebase";
+import { useRouter } from "next/router";
 export const AddSubscriptionServicesForm = () => {
   const { dialog } = React.useContext(
     AddSubscriptionServicesContext
@@ -21,6 +22,8 @@ export const AddSubscriptionServicesForm = () => {
     cost: "",
     billingPeriod: "",
   });
+
+  const router = useRouter();
   return (
     <form
       ref={form}
@@ -31,9 +34,13 @@ export const AddSubscriptionServicesForm = () => {
             functions,
             "addSubscriptionServices"
           );
-          addSubscriptionServices(payload).then((result: any) => {
+          addSubscriptionServices({
+            ...payload,
+            cost: Number(payload.cost),
+          }).then((result: any) => {
             if (result.data.success) {
               dialog.current?.close();
+              window.location.reload();
             }
           });
         }
@@ -102,7 +109,7 @@ export const AddSubscriptionServicesForm = () => {
         ]}
       />
       <Spacer direction="vertical" size={16} />
-      <div className="row">
+      <div className="row nowrap">
         <Button.SecondaryOutline onClick={() => dialog.current?.close()}>
           Close
         </Button.SecondaryOutline>

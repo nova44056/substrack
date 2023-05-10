@@ -97,6 +97,7 @@ export const deleteSubscriptionService = functions.https.onCall(
         .remove();
 
       return {
+        id: subscriptionServiceId,
         message: `Subscription service ${subscriptionServiceId} successfully deleted.`,
       };
     } catch (error) {
@@ -104,6 +105,54 @@ export const deleteSubscriptionService = functions.https.onCall(
       throw new functions.https.HttpsError(
         "internal",
         "An error occurred while deleting the subscription service."
+      );
+    }
+  }
+);
+
+export const getCostBreakdown = functions.https.onCall(
+  async (data, context) => {
+    // Check if user is authenticated
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        "User is not authenticated"
+      );
+    }
+
+    try {
+      const subscriptionServicesSnapshot = await admin
+        .database()
+        .ref("subscriptionServices")
+        .orderByChild("userId")
+        .equalTo(context.auth.uid)
+        .once("value");
+      const subscriptionServices = subscriptionServicesSnapshot.val();
+
+      let totalMonthlyCost = 0;
+      let totalYearlyCost = 0;
+
+      for (const key in subscriptionServices) {
+        if (subscriptionServices.hasOwnProperty(key)) {
+          const { cost, billingPeriod } = subscriptionServices[key];
+
+          // Check if the billing period is monthly or yearly
+          if (billingPeriod === "monthly") {
+            totalMonthlyCost += cost;
+            totalYearlyCost += cost * 12;
+          } else if (billingPeriod === "yearly") {
+            totalMonthlyCost += cost / 12;
+            totalYearlyCost += cost;
+          }
+        }
+      }
+
+      return { totalMonthlyCost, totalYearlyCost };
+    } catch (error) {
+      console.error(error);
+      throw new functions.https.HttpsError(
+        "internal",
+        "Error calculating cost breakdown"
       );
     }
   }
