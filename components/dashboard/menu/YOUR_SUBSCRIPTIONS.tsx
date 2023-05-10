@@ -8,6 +8,7 @@ import { Button } from "../../button";
 import { CostBreakdown } from "../cost-breakdown/CostBreakdown";
 import { Spacer } from "../../spacer";
 import { Card } from "../../card";
+import { AddReview } from "../add-review";
 export const YOUR_SUBSCRIPTIONS = () => {
   const [subscriptionServices, setSubscriptionServices] =
     React.useState<ISubsciptionServices[]>();
@@ -40,6 +41,7 @@ export const YOUR_SUBSCRIPTIONS = () => {
           <h1>Your Subscriptions</h1>
           <AddSubscriptionServices />
         </div>
+        <Spacer direction="vertical" size={16} />
         <ul
           style={{
             height: "calc(100vh - 91.53px - 91.53px - 35.99px)",
@@ -47,18 +49,16 @@ export const YOUR_SUBSCRIPTIONS = () => {
           }}
         >
           <Spacer direction="vertical" size={16} />
-          {subscriptionServices?.map((subscriptionService) => (
-            <>
-              <Card.SecondaryOutline
-                style={{ width: "100%" }}
-                role="list"
-                key={subscriptionService.id}
-              >
+          {subscriptionServices?.map((subscriptionService, index) => (
+            <div key={index}>
+              <Card.SecondaryOutline style={{ width: "100%" }} role="list">
                 <h2>{subscriptionService.name}</h2>
                 <p>Cost: ${subscriptionService.cost}</p>
                 <p style={{ textTransform: "capitalize" }}>
                   Billing Period: {subscriptionService.billingPeriod}
                 </p>
+                <AddReview subscriptionServiceId={subscriptionService.id} />
+                <Spacer direction="vertical" size={8} />
                 <Button.Primary
                   onClick={() => {
                     const deleteSubscriptionService = httpsCallable(
@@ -76,7 +76,7 @@ export const YOUR_SUBSCRIPTIONS = () => {
                 </Button.Primary>
               </Card.SecondaryOutline>
               <Spacer direction="vertical" size={16} />
-            </>
+            </div>
           ))}
         </ul>
       </div>
