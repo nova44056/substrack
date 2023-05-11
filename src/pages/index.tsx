@@ -1,14 +1,11 @@
-import Head from "next/head";
+import { useRouter } from "next/router";
+import React from "react";
 
 export default function Home() {
-  return <></>;
-}
+  const router = useRouter();
+  React.useEffect(() => {
+    router.push("/login");
+  }, []);
 
-export async function getServerSideProps() {
-  return {
-    redirect: {
-      destination: "/login",
-      permanent: false,
-    },
-  };
+  return <></>;
 }

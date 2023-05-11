@@ -1,6 +1,5 @@
 import { signOut } from "firebase/auth";
 import { Button } from "../../../components/button";
-import { AddSubscriptionServices } from "../../../components/dashboard/add-subscription-services";
 import { Layout } from "../../../components/layout";
 import { AuthContext } from "../../../context";
 import { auth } from "../../../firebase";
@@ -10,7 +9,6 @@ import React from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/Dashboard.module.css";
 import { MENUS } from "../../../components/dashboard/constants";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { MenuContent } from "../../../components/dashboard/menu";
 import { DASHBOARD_MENU_KEYS } from "../../../components/dashboard/enum";
@@ -23,6 +21,10 @@ function Dashboard() {
   const [menus, setMenus] = React.useState(MENUS);
 
   const { tab } = router.query;
+
+  React.useEffect(() => {
+    if (!tab) router.push(MENUS[0].href);
+  }, []);
 
   return (
     <Layout>
@@ -58,20 +60,3 @@ function Dashboard() {
 }
 
 export default isPrivateRoute(Dashboard);
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const { query } = context;
-  if (!query.tab)
-    return {
-      redirect: {
-        destination: MENUS[0].href,
-        permanent: false,
-      },
-    };
-
-  return {
-    props: {},
-  };
-};

@@ -46,6 +46,7 @@ function Login() {
             <Spacer direction="horizontal" size={1} />
             <Link href="/register">Create a account</Link>
           </div>
+          <Spacer direction="vertical" size={32} />
           <LoginForm />
         </section>
       </Layout>

@@ -50,6 +50,8 @@ export const LoginForm = () => {
         autoComplete="email"
         required={true}
       />
+      <Spacer direction="vertical" size={16} />
+
       <Input.Password
         value={payload.password}
         onChange={(event) => {
@@ -66,7 +68,6 @@ export const LoginForm = () => {
         required={true}
       />
       <Link href="/">Forgot Passsword?</Link>
-      <br />
       <Spacer size={16} direction="vertical" />
       <Button.Primary>Sign in</Button.Primary>
       <Spacer size={8} direction="vertical" />
