@@ -10,7 +10,7 @@ import { Input } from "../../input";
 import { Select } from "../../select";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "../../../firebase";
-import { useRouter } from "next/router";
+import { Spinner } from "../../loading";
 export const AddSubscriptionServicesForm = () => {
   const { dialog } = React.useContext(
     AddSubscriptionServicesContext
@@ -22,14 +22,15 @@ export const AddSubscriptionServicesForm = () => {
     cost: "",
     billingPeriod: "",
   });
+  const [loading, setLoading] = React.useState(false);
 
-  const router = useRouter();
   return (
     <form
       ref={form}
       onSubmit={(event) => {
         event.preventDefault();
         if (form.current?.reportValidity()) {
+          setLoading(true);
           const addSubscriptionServices = httpsCallable(
             functions,
             "addSubscriptionServices"
@@ -38,6 +39,7 @@ export const AddSubscriptionServicesForm = () => {
             ...payload,
             cost: Number(payload.cost),
           }).then((result: any) => {
+            setLoading(false);
             if (result.data.success) {
               dialog.current?.close();
               window.location.reload();
@@ -110,11 +112,16 @@ export const AddSubscriptionServicesForm = () => {
       />
       <Spacer direction="vertical" size={16} />
       <div className="row nowrap">
-        <Button.SecondaryOutline onClick={() => dialog.current?.close()}>
+        <Button.SecondaryOutline
+          disabled={loading}
+          onClick={() => dialog.current?.close()}
+        >
           Close
         </Button.SecondaryOutline>
         <Spacer direction="horizontal" size={16} />
-        <Button.Primary type="submit">Add</Button.Primary>
+        <Button.Primary disabled={loading} type="submit">
+          {loading ? <Spinner visible color="#fff" size={16} /> : "Add "}
+        </Button.Primary>
       </div>
     </form>
   );

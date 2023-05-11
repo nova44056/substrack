@@ -7,7 +7,10 @@ export const AddReviewDialog = () => {
   const { dialog } = React.useContext(AddReviewContext) as IAddReviewContext;
   return (
     <dialog ref={dialog} className={styles.dialog}>
-      <AddReviewForm />
+      <header>Add Reviews</header>
+      <main>
+        <AddReviewForm />
+      </main>
     </dialog>
   );
 };

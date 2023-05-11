@@ -9,9 +9,11 @@ import { CostBreakdown } from "../cost-breakdown/CostBreakdown";
 import { Spacer } from "../../spacer";
 import { Card } from "../../card";
 import { AddReview } from "../add-review";
+import { Spinner } from "../../loading";
 export const YOUR_SUBSCRIPTIONS = () => {
   const [subscriptionServices, setSubscriptionServices] =
     React.useState<ISubsciptionServices[]>();
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     const getSubscriptionServices = httpsCallable(
@@ -60,7 +62,9 @@ export const YOUR_SUBSCRIPTIONS = () => {
                 <AddReview subscriptionServiceId={subscriptionService.id} />
                 <Spacer direction="vertical" size={8} />
                 <Button.Primary
+                  disabled={loading}
                   onClick={() => {
+                    setLoading(true);
                     const deleteSubscriptionService = httpsCallable(
                       functions,
                       "deleteSubscriptionService"
@@ -68,11 +72,16 @@ export const YOUR_SUBSCRIPTIONS = () => {
                     deleteSubscriptionService({
                       subscriptionServiceId: subscriptionService.id,
                     }).then((result) => {
+                      setLoading(false);
                       window.location.reload();
                     });
                   }}
                 >
-                  Delete
+                  {loading ? (
+                    <Spinner visible color="#fff" size={16} />
+                  ) : (
+                    "Delete"
+                  )}
                 </Button.Primary>
               </Card.SecondaryOutline>
               <Spacer direction="vertical" size={16} />

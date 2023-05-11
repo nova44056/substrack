@@ -11,6 +11,7 @@ import { Input } from "../../input";
 import { Select } from "../../select";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "../../../firebase";
+import { Spinner } from "../../loading";
 export const AddReviewForm = () => {
   const { dialog, subscriptionServiceId } = React.useContext(
     AddReviewContext
@@ -21,24 +22,29 @@ export const AddReviewForm = () => {
     rating: "",
     subscriptionServiceId: subscriptionServiceId,
   });
+  const [loading, setLoading] = React.useState(false);
 
   return (
     <form
       ref={form}
       onSubmit={(event) => {
         event.preventDefault();
-        const postSubscriptionServiceReview = httpsCallable(
-          functions,
-          "postSubscriptionServiceReview"
-        );
-        postSubscriptionServiceReview({
-          ...payload,
-          rating: Number(payload.rating),
-        }).then((result: any) => {
-          if (!result.data) return;
-          dialog.current?.close();
-          window.location.reload();
-        });
+        if (form.current?.reportValidity()) {
+          setLoading(true);
+          const postSubscriptionServiceReview = httpsCallable(
+            functions,
+            "postSubscriptionServiceReview"
+          );
+          postSubscriptionServiceReview({
+            ...payload,
+            rating: Number(payload.rating),
+          }).then((result: any) => {
+            if (!result.data) return;
+            setLoading(false);
+            dialog.current?.close();
+            window.location.reload();
+          });
+        }
       }}
     >
       <Input.TextArea
@@ -76,11 +82,16 @@ export const AddReviewForm = () => {
       />
       <Spacer direction="vertical" size={16} />
       <div className="row nowrap">
-        <Button.SecondaryOutline onClick={() => dialog.current?.close()}>
+        <Button.SecondaryOutline
+          disabled={loading}
+          onClick={() => dialog.current?.close()}
+        >
           Close
         </Button.SecondaryOutline>
         <Spacer direction="horizontal" size={16} />
-        <Button.Primary type="submit">Add</Button.Primary>
+        <Button.Primary disabled={loading} type="submit">
+          {loading ? <Spinner size={16} visible color="#fff" /> : "Add"}
+        </Button.Primary>
       </div>
     </form>
   );

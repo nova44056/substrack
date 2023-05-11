@@ -26,7 +26,7 @@ export const CostBreakdown = () => {
 
   return (
     <div className="row">
-      <Card.Primary>
+      <Card.SecondaryOutline>
         <h1>
           <span>Estimiated Total Monthly Cost: </span>
         </h1>
@@ -38,9 +38,9 @@ export const CostBreakdown = () => {
               : "Caculating..."}
           </span>
         </p>
-      </Card.Primary>
+      </Card.SecondaryOutline>
       <Spacer direction="horizontal" size={32} />
-      <Card.Primary>
+      <Card.SecondaryOutline>
         <h1>
           <span>Estimated Total Yearly Cost: </span>
         </h1>
@@ -52,7 +52,7 @@ export const CostBreakdown = () => {
               : "Caculating..."}
           </span>
         </p>
-      </Card.Primary>
+      </Card.SecondaryOutline>
     </div>
   );
 };

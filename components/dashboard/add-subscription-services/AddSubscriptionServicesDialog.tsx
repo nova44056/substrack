@@ -9,7 +9,10 @@ export const AddSubscriptionServicesDialog = () => {
   ) as IAddSubscriptionServicesContext;
   return (
     <dialog ref={dialog} className={styles.dialog}>
-      <AddSubscriptionServicesForm />
+      <header>Add Subscription Service</header>
+      <main>
+        <AddSubscriptionServicesForm />
+      </main>
     </dialog>
   );
 };

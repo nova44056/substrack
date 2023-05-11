@@ -3,5 +3,17 @@
   margin-right: auto;
   margin-top: auto;
   margin-bottom: auto;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.dialog header {
+  padding: 0.5rem;
+  text-align: center;
+  background-color: var(--primary);
+  color: var(--secondary);
+}
+
+.dialog main {
   padding: 1rem;
 }
